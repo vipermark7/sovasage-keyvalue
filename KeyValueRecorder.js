@@ -18,6 +18,28 @@ function writeToFile() {
     });
 }
 
+function getAllDataFromFile() {
+    // returns JSON that we will need to read json.parse()
+    try  {
+        if (fs.('output.txt')) {
+            fs.readFile('output.txt', 'utf8', (err, str) => {
+                data = JSON.parse(str);
+                
+                if (err) {
+                  console.error(err);
+                  return;
+                }
+              });
+        }
+        else {
+            fs.writeFileSync("output.txt", "[]");
+        }
+    } catch(error) {
+        console.log(error);
+    }
+    
+}
+getAllDataFromFile();
 
 function getKeyAndValueFromUrl(urlString) {
     let keyValueFromUrl = urlString.split("?")[1].split("=");
@@ -39,6 +61,7 @@ app.get("/set", (req, res) => {
 
 app.get("/get", (req, res) => {
     let keyFromUrl = req.url.split("?")[1];
+
 
     let returnValue = data.find(item => item["key"] === keyFromUrl)["value"]
     res.json({ "key from URL": keyFromUrl, "value": returnValue });
