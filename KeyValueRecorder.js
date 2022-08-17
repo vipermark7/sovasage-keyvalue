@@ -8,6 +8,15 @@ app.use(bodyParser.json());
 
 let data = []
 
+function fileExists(path) {
+    try {
+        fs.accessSync(path);
+    } catch (error) {
+        return false;
+    }
+    return true;
+}
+
 function writeToFile() {
     const content = JSON.stringify(data);
     fs.writeFile('output.txt', content, err => {
@@ -20,24 +29,10 @@ function writeToFile() {
 
 function getAllDataFromFile() {
     // returns JSON that we will need to read json.parse()
-    try  {
-        if (fs.('output.txt')) {
-            fs.readFile('output.txt', 'utf8', (err, str) => {
-                data = JSON.parse(str);
-                
-                if (err) {
-                  console.error(err);
-                  return;
-                }
-              });
-        }
-        else {
+        if (!fileExists('output.txt')) {
             fs.writeFileSync("output.txt", "[]");
         }
-    } catch(error) {
-        console.log(error);
-    }
-    
+        data = JSON.parse(fs.readFileSync('output.txt', 'utf8'));
 }
 getAllDataFromFile();
 
