@@ -1,11 +1,26 @@
 const express = require("express");
 const bodyParser = require('body-parser');
+const fs = require('fs');
 let app = express();
 const PORT = 4000;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 let data = []
+
+function writeToFile() {
+
+    const content = 'Some content!';
+
+    fs.writeFile('output.txt', content, err => {
+        if (err) {
+            console.error(err);
+        }
+        // file written successfully
+    });
+}
+
+writeToFile();
 
 function getKeyAndValueFromUrl(urlString) {
     let keyValueFromUrl = urlString.split("?")[1].split("=");
