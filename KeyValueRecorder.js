@@ -9,9 +9,7 @@ app.use(bodyParser.json());
 let data = []
 
 function writeToFile() {
-
-    const content = 'Some content!';
-
+    const content = JSON.stringify(data);
     fs.writeFile('output.txt', content, err => {
         if (err) {
             console.error(err);
@@ -20,7 +18,6 @@ function writeToFile() {
     });
 }
 
-writeToFile();
 
 function getKeyAndValueFromUrl(urlString) {
     let keyValueFromUrl = urlString.split("?")[1].split("=");
@@ -36,6 +33,7 @@ app.get("/", (request, response) => response.status(200).send("You're at the roo
 app.get("/set", (req, res) => {
     let kv = getKeyAndValueFromUrl(req.url);
     data.push(kv)
+    writeToFile();
     res.status(200).json(kv);
 })
 
